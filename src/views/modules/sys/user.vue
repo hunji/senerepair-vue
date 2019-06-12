@@ -48,6 +48,12 @@
         label="手机号">
       </el-table-column>
       <el-table-column
+        prop="realName"
+        header-align="center"
+        align="center"
+        label="实际姓名">
+      </el-table-column>
+      <el-table-column
         prop="status"
         header-align="center"
         align="center"

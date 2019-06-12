@@ -1,6 +1,7 @@
 /**
  * 开发环境
  */
+/* eslint-disable */
 ;(function () {
   window.SITE_CONFIG = {};
 

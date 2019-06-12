@@ -19,6 +19,9 @@
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
+      <el-form-item label="实际姓名" prop="mobile">
+        <el-input v-model="dataForm.realName" placeholder="实际姓名"></el-input>
+      </el-form-item>
       <el-form-item label="角色" size="mini" prop="roleIdList">
         <el-checkbox-group v-model="dataForm.roleIdList">
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
@@ -83,6 +86,7 @@
           salt: '',
           email: '',
           mobile: '',
+          realName: '',
           roleIdList: [],
           status: 1
         },
@@ -135,6 +139,7 @@
                 this.dataForm.mobile = data.user.mobile
                 this.dataForm.roleIdList = data.user.roleIdList
                 this.dataForm.status = data.user.status
+                this.dataForm.realName = data.user.realName
               }
             })
           }
@@ -155,7 +160,8 @@
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
-                'roleIdList': this.dataForm.roleIdList
+                'roleIdList': this.dataForm.roleIdList,
+                'realName': this.dataForm.realName
               })
             }).then(({data}) => {
               if (data && data.code === 0) {
