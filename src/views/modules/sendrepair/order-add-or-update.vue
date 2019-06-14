@@ -12,16 +12,34 @@
       <el-card class="box-card">
         <el-form :inline="true" :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="120px">
           <el-form-item label="委托单位名称" prop="trusteeName">
-            <el-input v-model="dataForm.trusteeName" placeholder="委托单位名称"></el-input>
+            <el-select v-model="dataForm.trusteeName" placeholder="请选择" style="width: 515px;" filterable @change="trusteeChanged">
+              <el-option
+                v-for="item in occInfos"
+                :key="item.occ01"
+                :label="item.occ18"
+                :value="item.occ01"
+                >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="合同号" prop="contractCode">
+            <el-select v-model="dataForm.contractCode" placeholder="请选择" style="width: 515px;" filterable>
+              <el-option
+                v-for="item in htInfos"
+                :key="item.c002"
+                :label="item.c002"
+                :value="item.c002"
+                >
+                <span>{{ item.c002 }}</span>
+                <span style="color: #8492a6; font-size: 13px">:{{ item.c004 }}/{{ item.c008 }}</span>
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="联系人" prop="contactName">
             <el-input v-model="dataForm.contactName" placeholder="联系人"></el-input>
           </el-form-item>
           <el-form-item label="联系人电话" prop="contactPhone">
             <el-input v-model="dataForm.contactPhone" placeholder="联系人电话"></el-input>
-          </el-form-item>
-          <el-form-item label="合同号" prop="contractCode">
-            <el-input v-model="dataForm.contractCode" placeholder="合同号"></el-input>
           </el-form-item>
           <el-form-item label="轮对型号" prop="wheelModel">
             <el-input v-model="dataForm.wheelModel" placeholder="轮对型号"></el-input>
@@ -189,6 +207,7 @@
         dataForm: {
           id: 0,
           trusteeName: '',
+          trusteeCode: '',
           contactName: '',
           contactPhone: '',
           contractId: '',
@@ -238,7 +257,9 @@
         dataListSelections: [],
         importVisible: false,
         uploadUrl: '',
-        fileList: []
+        fileList: [],
+        occInfos: [],
+        htInfos: []
       }
     },
     components: {
@@ -249,6 +270,8 @@
         this.dataForm.id = id || 0
         this.uploadUrl = window.SITE_CONFIG.baseUrl + `/sendrepair/orderwheelinfo/upload?orderId=${this.dataForm.id}&token=${this.$cookie.get('token')}`
         this.visible = true
+        // 获取委托单位
+        this.getOccInfos()
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
           if (this.dataForm.id) {
@@ -258,6 +281,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
+                this.dataForm.trusteeCode = data.order.trusteeCode
                 this.dataForm.trusteeName = data.order.trusteeName
                 this.dataForm.contactName = data.order.contactName
                 this.dataForm.contactPhone = data.order.contactPhone
@@ -270,10 +294,14 @@
                 this.dataForm.createdDate = data.order.createdDate
                 this.dataForm.createBy = data.order.createBy
                 this.dataForm.serialNumber = data.order.serialNumber
+                this.getHtInfos()
               }
             })
+          } else {
+            this.htInfos = []
           }
         })
+        // 获取轮对信息
         this.getDataList()
       },
       // 表单提交
@@ -286,6 +314,7 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || undefined,
                 'trusteeName': this.dataForm.trusteeName,
+                'trusteeCode': this.dataForm.trusteeCode,
                 'contactName': this.dataForm.contactName,
                 'contactPhone': this.dataForm.contactPhone,
                 'contractId': this.dataForm.contractId,
@@ -368,6 +397,43 @@
         } else {
           this.$message.error(data.msg)
         }
+      },
+      // 获取客户列表
+      getOccInfos () {
+        this.$http({
+          url: this.$http.adornUrl(`/sendrepair/userocc/info/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.occInfos = data.occList
+          }
+        })
+      },
+      // 获取合同列表
+      getHtInfos () {
+        this.htInfos = []
+        this.$http({
+          url: this.$http.adornUrl('/sendrepair/tabhttz/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'code': this.dataForm.trusteeCode
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.htInfos = data.htInfos
+          }
+        })
+      },
+      // 委托单位名称选中后的事件：根据委托单位编号获取合同名称
+      trusteeChanged (value) {
+        let obj = {}
+        obj = this.occInfos.find((item) => {
+          return item.occ01 === value
+        })
+        this.dataForm.trusteeName = obj.occ18
+        this.dataForm.trusteeCode = obj.occ01
+        this.getHtInfos()
       }
     }
   }
@@ -381,6 +447,9 @@
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 16px;
+}
+.el-select-dropdown__item{
+  max-width: 500px;
 }
 </style>
 

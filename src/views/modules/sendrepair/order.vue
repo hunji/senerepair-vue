@@ -42,7 +42,16 @@
         header-align="center"
         align="center"
         label="委托单位名称"
-        width="120">
+        show-overflow-tooltip
+        width="200">
+      </el-table-column>
+      <el-table-column
+        prop="contractCode"
+        header-align="center"
+        align="center"
+        label="合同号"
+        show-overflow-tooltip
+        width="200">
       </el-table-column>
       <el-table-column
         prop="contactName"
@@ -50,13 +59,6 @@
         align="center"
         label="联系人"
         width="80">
-      </el-table-column>
-      <el-table-column
-        prop="contractCode"
-        header-align="center"
-        align="center"
-        label="合同号"
-        width="200">
       </el-table-column>
       <el-table-column
         prop="wheelModel"

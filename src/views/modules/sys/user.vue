@@ -39,18 +39,21 @@
         prop="email"
         header-align="center"
         align="center"
+        width="200"
         label="邮箱">
       </el-table-column>
       <el-table-column
         prop="mobile"
         header-align="center"
         align="center"
+        width="150"
         label="手机号">
       </el-table-column>
       <el-table-column
         prop="realName"
         header-align="center"
         align="center"
+        width="150"
         label="实际姓名">
       </el-table-column>
       <el-table-column
@@ -74,9 +77,10 @@
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="200"
         label="操作">
         <template slot-scope="scope">
+          <el-button type="text" size="small" @click="occUpdateHandle(scope.row.userId)">客户关系</el-button>
           <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">修改</el-button>
           <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button>
         </template>
@@ -93,11 +97,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <user-occ-update v-if="occVisible" ref="occUpdate" ></user-occ-update>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './user-add-or-update'
+  import UserOccUpdate from './user-occ-update'
   export default {
     data () {
       return {
@@ -110,11 +116,13 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        occVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      UserOccUpdate
     },
     activated () {
       this.getDataList()
@@ -162,6 +170,13 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // occ客户关系维护
+      occUpdateHandle (id) {
+        this.occVisible = true
+        this.$nextTick(() => {
+          this.$refs.occUpdate.init(id)
         })
       },
       // 删除

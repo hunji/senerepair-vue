@@ -12,14 +12,14 @@
           <el-form-item label="委托单位名称" prop="trusteeName">
             <el-input v-model="dataForm.trusteeName" placeholder="委托单位名称"></el-input>
           </el-form-item>
+          <el-form-item label="合同号" prop="contractCode">
+            <el-input v-model="dataForm.contractCode" placeholder="合同号"></el-input>
+          </el-form-item>
           <el-form-item label="联系人" prop="contactName">
             <el-input v-model="dataForm.contactName" placeholder="联系人"></el-input>
           </el-form-item>
           <el-form-item label="联系人电话" prop="contactPhone">
             <el-input v-model="dataForm.contactPhone" placeholder="联系人电话"></el-input>
-          </el-form-item>
-          <el-form-item label="合同号" prop="contractCode">
-            <el-input v-model="dataForm.contractCode" placeholder="合同号"></el-input>
           </el-form-item>
           <el-form-item label="轮对型号" prop="wheelModel">
             <el-input v-model="dataForm.wheelModel" placeholder="轮对型号"></el-input>
