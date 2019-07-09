@@ -165,7 +165,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.dataForm.srOrderId = data.orderWheelInfo.srOrderId
                 this.dataForm.operatingInterval = data.orderWheelInfo.operatingInterval
                 this.dataForm.trainNumber = data.orderWheelInfo.trainNumber

@@ -183,7 +183,7 @@
   </el-dialog>
   <el-dialog  title="批量导入"  :visible.sync="importVisible" width="30%">
       <span>导入模板下载:</span>
-      <a  href="/static/excel/轮对信息模板.xls" target="_blank">导入模板</a>  
+      <a  :href="excelHref" target="_blank">导入模板</a>  
       <span slot="footer" class="dialog-footer">
         <el-upload
           :action="uploadUrl"
@@ -259,7 +259,8 @@
         uploadUrl: '',
         fileList: [],
         occInfos: [],
-        htInfos: []
+        htInfos: [],
+        excelHref: window.SITE_CONFIG['cdnUrl'] + '/static/excel/轮对信息模板.xls'
       }
     },
     components: {
@@ -280,7 +281,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.dataForm.trusteeCode = data.order.trusteeCode
                 this.dataForm.trusteeName = data.order.trusteeName
                 this.dataForm.contactName = data.order.contactName
@@ -327,7 +328,7 @@
                 'createBy': this.dataForm.createBy
               })
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
@@ -356,7 +357,7 @@
             'orderId': this.dataForm.id
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -384,7 +385,7 @@
       // 上传成功后的调用函数
       handleAvatarSuccess (data) {
         this.fileList = []
-        if (data && data.code === 0) {
+        if (data && data.code === 200) {
           this.dialogVisible = false
           this.$message({
             message: '导入成功',
@@ -405,7 +406,7 @@
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.occInfos = data.occList
           }
         })
@@ -420,7 +421,7 @@
             'code': this.dataForm.trusteeCode
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.htInfos = data.htInfos
           }
         })

@@ -40,7 +40,7 @@
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.occList = data.occList.map(function (obj, index) {
               return obj.occ01
             })
@@ -53,7 +53,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.allInfos = data.occInfos
               }
             })
@@ -72,7 +72,7 @@
             'occList': this.occList
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.$message({
               message: '操作成功',
               type: 'success',

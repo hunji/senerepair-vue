@@ -3,10 +3,10 @@
     width="60%"
     :visible.sync="visible">
     <div>
-      <div class="info">
+      <el-divider content-position="left">
         送修信息
         <span  v-if="this.dataForm.id">(送修单编号:{{this.dataForm.serialNumber}})</span>
-      </div>
+      </el-divider>
       <el-card class="box-card">
         <el-form disabled :inline="true" :model="dataForm" ref="dataForm" label-width="120px">
           <el-form-item label="委托单位名称" prop="trusteeName">
@@ -38,9 +38,7 @@
       </el-card>
     </div>
     <div>
-      <div class="info">
-        流转信息
-      </div>
+      <el-divider content-position="left">流转信息</el-divider>
       <el-card class="box-card">
         <el-table :data="approvalList"  border  v-loading="dataListLoading" style="width: 100%;">
           <el-table-column
@@ -84,9 +82,7 @@
       </el-card>
     </div>
     <div v-if="this.dataForm.id">
-      <div class="info" >
-        送修轮对信息 
-      </div>
+      <el-divider content-position="left">送修轮对信息</el-divider>
       <el-card class="box-card">
         <el-table :data="dataList"  border  v-loading="dataListLoading" @selection-change="selectionChangeHandle" style="width: 100%;">
           <el-table-column
@@ -238,7 +234,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.dataForm.trusteeName = data.order.trusteeName
                 this.dataForm.contactName = data.order.contactName
                 this.dataForm.contactPhone = data.order.contactPhone
@@ -271,7 +267,7 @@
             'orderId': this.dataForm.id
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -291,7 +287,7 @@
             'orderId': this.dataForm.id
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.approvalList = data.approvalList
           } else {
             this.dataList = []
@@ -317,15 +313,4 @@
     }
   }
 </script>
-<style scoped>
-.info{
-  height: 30px;
-  margin-top: 10px;
-  border-bottom: 2px solid #eee;
-  color: rgba(0,0,0,.85);
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-</style>
 
